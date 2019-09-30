@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class ServiceProviderTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $applicationMock = \Mockery::mock(Application::class);
 
@@ -211,7 +211,7 @@ class ServiceProviderTest extends TestCase
      */
     public function it_works_with_multiple_parameters()
     {
-        $collection = collect([
+        $collection     = collect([
             [
                 'field_1' => 'key_1',
                 'field_2' => 'key_2',
@@ -254,21 +254,21 @@ class ServiceProviderTest extends TestCase
     public function collectionExtractProvider()
     {
         return [
-            'Single column'          => [
+            'Single column'       => [
                 'collection'     => collect([
                     [
                         'field_1' => 'key_1',
                         'field_2' => 'item_1',
                     ],
                 ]),
-                'fields'      => 'field_2',
+                'fields'         => 'field_2',
                 'expectedResult' => collect([
                     collect([
                         'field_2' => 'item_1',
                     ]),
                 ]),
             ],
-            'Multi column'          => [
+            'Multi column'        => [
                 'collection'     => collect([
                     [
                         'field_1' => 'key_1',
@@ -276,7 +276,7 @@ class ServiceProviderTest extends TestCase
                         'field_3' => 'item_3',
                     ],
                 ]),
-                'fields'      => ['field_1', 'field_3'],
+                'fields'         => ['field_1', 'field_3'],
                 'expectedResult' => collect([
                     collect([
                         'field_1' => 'key_1',
@@ -284,15 +284,15 @@ class ServiceProviderTest extends TestCase
                     ]),
                 ]),
             ],
-            'Multi column deeper'          => [
+            'Multi column deeper' => [
                 'collection'     => collect([
                     [
-                        'field_1' => [ 'value' => 'key_1'],
-                        'field_2' => [ 'value' => 'item_1'],
-                        'field_3' => [ 'value' => 'item_3'],
+                        'field_1' => ['value' => 'key_1'],
+                        'field_2' => ['value' => 'item_1'],
+                        'field_3' => ['value' => 'item_3'],
                     ],
                 ]),
-                'fields'      => ['field_1.value', 'field_3.value'],
+                'fields'         => ['field_1.value', 'field_3.value'],
                 'expectedResult' => collect([
                     collect([
                         'field_1.value' => 'key_1',
@@ -301,15 +301,15 @@ class ServiceProviderTest extends TestCase
                 ]),
             ],
 
-            'Multi column deeper with alias'          => [
+            'Multi column deeper with alias' => [
                 'collection'     => collect([
                     [
-                        'field_1' => [ 'value' => 'key_1'],
-                        'field_2' => [ 'value' => 'item_1'],
-                        'field_3' => [ 'value' => 'item_3'],
+                        'field_1' => ['value' => 'key_1'],
+                        'field_2' => ['value' => 'item_1'],
+                        'field_3' => ['value' => 'item_3'],
                     ],
                 ]),
-                'fields'      => [['field_1' => 'field_1.value'], ['field_3' => 'field_3.value']],
+                'fields'         => [['field_1' => 'field_1.value'], ['field_3' => 'field_3.value']],
                 'expectedResult' => collect([
                     collect([
                         'field_1' => 'key_1',
@@ -318,15 +318,15 @@ class ServiceProviderTest extends TestCase
                 ]),
             ],
 
-            'Multi column deeper with conflicts'          => [
+            'Multi column deeper with conflicts' => [
                 'collection'     => collect([
                     [
-                        'field_1' => [ 'value' => 'key_1'],
+                        'field_1'       => ['value' => 'key_1'],
                         'field_1.value' => 'item_1',
-                        'field_3' => [ 'value' => 'item_3'],
+                        'field_3'       => ['value' => 'item_3'],
                     ],
                 ]),
-                'fields'      => 'field_1.value',
+                'fields'         => 'field_1.value',
                 'expectedResult' => collect([
                     collect([
                         'field_1.value' => 'item_1',
