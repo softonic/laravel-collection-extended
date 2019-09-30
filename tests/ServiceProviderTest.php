@@ -250,4 +250,106 @@ class ServiceProviderTest extends TestCase
 
         $collection->groupByHierarchy('field_1');
     }
+
+    public function collectionExtractProvider()
+    {
+        return [
+            'Single column'          => [
+                'collection'     => collect([
+                    [
+                        'field_1' => 'key_1',
+                        'field_2' => 'item_1',
+                    ],
+                ]),
+                'fields'      => 'field_2',
+                'expectedResult' => collect([
+                    collect([
+                        'field_2' => 'item_1',
+                    ]),
+                ]),
+            ],
+            'Multi column'          => [
+                'collection'     => collect([
+                    [
+                        'field_1' => 'key_1',
+                        'field_2' => 'item_1',
+                        'field_3' => 'item_3',
+                    ],
+                ]),
+                'fields'      => ['field_1', 'field_3'],
+                'expectedResult' => collect([
+                    collect([
+                        'field_1' => 'key_1',
+                        'field_3' => 'item_3',
+                    ]),
+                ]),
+            ],
+            'Multi column deeper'          => [
+                'collection'     => collect([
+                    [
+                        'field_1' => [ 'value' => 'key_1'],
+                        'field_2' => [ 'value' => 'item_1'],
+                        'field_3' => [ 'value' => 'item_3'],
+                    ],
+                ]),
+                'fields'      => ['field_1.value', 'field_3.value'],
+                'expectedResult' => collect([
+                    collect([
+                        'field_1.value' => 'key_1',
+                        'field_3.value' => 'item_3',
+                    ]),
+                ]),
+            ],
+
+            'Multi column deeper with alias'          => [
+                'collection'     => collect([
+                    [
+                        'field_1' => [ 'value' => 'key_1'],
+                        'field_2' => [ 'value' => 'item_1'],
+                        'field_3' => [ 'value' => 'item_3'],
+                    ],
+                ]),
+                'fields'      => [['field_1' => 'field_1.value'], ['field_3' => 'field_3.value']],
+                'expectedResult' => collect([
+                    collect([
+                        'field_1' => 'key_1',
+                        'field_3' => 'item_3',
+                    ]),
+                ]),
+            ],
+
+            'Multi column deeper with conflicts'          => [
+                'collection'     => collect([
+                    [
+                        'field_1' => [ 'value' => 'key_1'],
+                        'field_1.value' => 'item_1',
+                        'field_3' => [ 'value' => 'item_3'],
+                    ],
+                ]),
+                'fields'      => 'field_1.value',
+                'expectedResult' => collect([
+                    collect([
+                        'field_1.value' => 'item_1',
+                    ]),
+                ]),
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider collectionExtractProvider
+     *
+     * @param Collection $collection
+     * @param mixed      $fields
+     * @param Collection $expectedResult
+     */
+    public function it_extracts_the_corresponding_fields(
+        Collection $collection,
+        $fields,
+        Collection $expectedResult
+    ) {
+        $extractedCollection = $collection->extract($fields);
+        $this->assertEquals($expectedResult, $extractedCollection);
+    }
 }

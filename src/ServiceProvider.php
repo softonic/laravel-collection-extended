@@ -9,6 +9,7 @@ namespace Softonic\Laravel\Collection;
  * @author  Jose Manuel Cardona <josemanuel.cardona@softonic.com>
  */
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
@@ -115,7 +116,7 @@ class ServiceProvider extends LaravelServiceProvider
                             ? [key($keyToMap), current($keyToMap)]
                             : [$keyToMap, $keyToMap];
 
-                        return [$keyMapped => $item[$keyToMap]];
+                        return [$keyMapped => Arr::get($item, $keyToMap)];
                     });
                 });
             });
