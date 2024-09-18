@@ -71,7 +71,7 @@ class ServiceProvider extends LaravelServiceProvider
                     foreach ($hierarchyKeys as $key) {
                         $value = data_get($item, $key);
                         if (!isset($value)) {
-                            throw new \RuntimeException("Grouping error: '${key}' doesn't exist in collection");
+                            throw new \RuntimeException("Grouping error: '{$key}' doesn't exist in collection");
                         }
 
                         if (!isset($hierarchyItemPointer[$value])) {
