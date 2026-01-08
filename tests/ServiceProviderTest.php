@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class GroupByHierarchyTest.
  *
@@ -10,6 +11,7 @@ namespace Softonic\Laravel\Collection;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ServiceProviderTest extends TestCase
@@ -189,27 +191,17 @@ class ServiceProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider collectionHierarchiesProvider
-     *
-     * @param Collection $collection
-     * @param mixed      $hierarchy
-     * @param Collection $expectedResult
-     */
-    public function it_builds_the_corresponding_hierarchy(
+    #[DataProvider('collectionHierarchiesProvider')]
+    public function test_it_builds_the_corresponding_hierarchy(
         Collection $collection,
-        $hierarchy,
+        mixed $hierarchy,
         Collection $expectedResult
     ) {
         $hierarchiedCollection = $collection->groupByHierarchy($hierarchy);
         $this->assertEquals($expectedResult, $hierarchiedCollection);
     }
 
-    /**
-     * @test
-     */
-    public function it_works_with_multiple_parameters()
+    public function test_it_works_with_multiple_parameters()
     {
         $collection     = collect([
             [
@@ -234,10 +226,7 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals($expectedResult, $hierarchiedCollection);
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_a_runtime_exception_if_the_field_does_not_exist()
+    public function test_it_throws_a_runtime_exception_if_the_field_does_not_exist()
     {
         $collection = collect([
             [
@@ -336,17 +325,10 @@ class ServiceProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider collectionExtractProvider
-     *
-     * @param Collection $collection
-     * @param mixed      $fields
-     * @param Collection $expectedResult
-     */
-    public function it_extracts_the_corresponding_fields(
+    #[DataProvider('collectionExtractProvider')]
+    public function test_it_extracts_the_corresponding_fields(
         Collection $collection,
-        $fields,
+        mixed $fields,
         Collection $expectedResult
     ) {
         $extractedCollection = $collection->extract($fields);
