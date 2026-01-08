@@ -46,8 +46,3 @@ jobs:
 
       - name: Run static analysis
         run: composer run phpstan
-
-      - name: Upload coverage to Scrutinizer
-        run: |
-          wget https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --format=php-clover build/clover.xml
