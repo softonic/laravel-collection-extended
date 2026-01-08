@@ -11,19 +11,21 @@ namespace Softonic\Laravel\Collection;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Collection;
+use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ServiceProviderTest extends TestCase
 {
     public function setUp(): void
     {
-        $applicationMock = \Mockery::mock(Application::class);
+        $applicationMock = Mockery::mock(Application::class);
 
-        (new ServiceProvider($applicationMock))->register();
+        new ServiceProvider($applicationMock)->register();
     }
 
-    public static function collectionHierarchiesProvider()
+    public static function collectionHierarchiesProvider(): array
     {
         return [
             'String 1 level'          => [
@@ -191,8 +193,9 @@ class ServiceProviderTest extends TestCase
         ];
     }
 
+    #[Test]
     #[DataProvider('collectionHierarchiesProvider')]
-    public function test_it_builds_the_corresponding_hierarchy(
+    public function itBuildsTheCorrespondingHierarchy(
         Collection $collection,
         mixed $hierarchy,
         Collection $expectedResult
@@ -201,7 +204,8 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals($expectedResult, $hierarchiedCollection);
     }
 
-    public function test_it_works_with_multiple_parameters()
+    #[Test]
+    public function itWorksWithMultipleParameters()
     {
         $collection     = collect([
             [
@@ -226,7 +230,8 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals($expectedResult, $hierarchiedCollection);
     }
 
-    public function test_it_throws_a_runtime_exception_if_the_field_does_not_exist()
+    #[Test]
+    public function itThrowsARuntimeExceptionIfTheFieldDoesNotExist()
     {
         $collection = collect([
             [
@@ -240,7 +245,7 @@ class ServiceProviderTest extends TestCase
         $collection->groupByHierarchy('field_1');
     }
 
-    public static function collectionExtractProvider()
+    public static function collectionExtractProvider(): array
     {
         return [
             'Single column'       => [
@@ -325,8 +330,9 @@ class ServiceProviderTest extends TestCase
         ];
     }
 
+    #[Test]
     #[DataProvider('collectionExtractProvider')]
-    public function test_it_extracts_the_corresponding_fields(
+    public function itExtractsTheCorrespondingFields(
         Collection $collection,
         mixed $fields,
         Collection $expectedResult
