@@ -21,7 +21,7 @@ class ServiceProviderTest extends TestCase
         (new ServiceProvider($applicationMock))->register();
     }
 
-    public function collectionHierarchiesProvider()
+    public static function collectionHierarchiesProvider()
     {
         return [
             'String 1 level'          => [
@@ -251,7 +251,7 @@ class ServiceProviderTest extends TestCase
         $collection->groupByHierarchy('field_1');
     }
 
-    public function collectionExtractProvider()
+    public static function collectionExtractProvider()
     {
         return [
             'Single column'       => [
