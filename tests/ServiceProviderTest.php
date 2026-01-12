@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class GroupByHierarchyTest.
  *
@@ -10,18 +11,21 @@ namespace Softonic\Laravel\Collection;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Collection;
+use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ServiceProviderTest extends TestCase
 {
     public function setUp(): void
     {
-        $applicationMock = \Mockery::mock(Application::class);
+        $applicationMock = Mockery::mock(Application::class);
 
-        (new ServiceProvider($applicationMock))->register();
+        new ServiceProvider($applicationMock)->register();
     }
 
-    public function collectionHierarchiesProvider()
+    public static function collectionHierarchiesProvider(): array
     {
         return [
             'String 1 level'          => [
@@ -189,27 +193,19 @@ class ServiceProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider collectionHierarchiesProvider
-     *
-     * @param Collection $collection
-     * @param mixed      $hierarchy
-     * @param Collection $expectedResult
-     */
-    public function it_builds_the_corresponding_hierarchy(
+    #[Test]
+    #[DataProvider('collectionHierarchiesProvider')]
+    public function itBuildsTheCorrespondingHierarchy(
         Collection $collection,
-        $hierarchy,
+        mixed $hierarchy,
         Collection $expectedResult
     ) {
         $hierarchiedCollection = $collection->groupByHierarchy($hierarchy);
         $this->assertEquals($expectedResult, $hierarchiedCollection);
     }
 
-    /**
-     * @test
-     */
-    public function it_works_with_multiple_parameters()
+    #[Test]
+    public function itWorksWithMultipleParameters()
     {
         $collection     = collect([
             [
@@ -234,10 +230,8 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals($expectedResult, $hierarchiedCollection);
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_a_runtime_exception_if_the_field_does_not_exist()
+    #[Test]
+    public function itThrowsARuntimeExceptionIfTheFieldDoesNotExist()
     {
         $collection = collect([
             [
@@ -251,7 +245,7 @@ class ServiceProviderTest extends TestCase
         $collection->groupByHierarchy('field_1');
     }
 
-    public function collectionExtractProvider()
+    public static function collectionExtractProvider(): array
     {
         return [
             'Single column'       => [
@@ -336,17 +330,11 @@ class ServiceProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider collectionExtractProvider
-     *
-     * @param Collection $collection
-     * @param mixed      $fields
-     * @param Collection $expectedResult
-     */
-    public function it_extracts_the_corresponding_fields(
+    #[Test]
+    #[DataProvider('collectionExtractProvider')]
+    public function itExtractsTheCorrespondingFields(
         Collection $collection,
-        $fields,
+        mixed $fields,
         Collection $expectedResult
     ) {
         $extractedCollection = $collection->extract($fields);

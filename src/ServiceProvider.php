@@ -15,13 +15,13 @@ use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
 {
-    public function register()
+    public function register(): void
     {
         $this->registerGroupByHierarchy();
         $this->registerMultipleOnly();
     }
 
-    private function registerGroupByHierarchy()
+    private function registerGroupByHierarchy(): void
     {
         if (!Collection::hasMacro('groupByHierarchy')) {
             /*
@@ -87,7 +87,7 @@ class ServiceProvider extends LaravelServiceProvider
         }
     }
 
-    private function registerMultipleOnly()
+    private function registerMultipleOnly(): void
     {
         if (!Collection::hasMacro('extract')) {
             /*
