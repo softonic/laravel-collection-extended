@@ -14,8 +14,8 @@ This package adds new methods to Laravel collections.
 
 ## Requirements
 
-- PHP >= 8.2
-- Laravel 11.x or 12.x
+- PHP >= 8.5
+- Laravel 12.x
 
 Installation
 -------
